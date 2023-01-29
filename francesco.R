@@ -51,7 +51,8 @@ plot_comparison("traveltime")
 plot_comparison("schoolsup")
 plot_comparison("health")
 
-data = common_student
+common_student$mean_grade.x <- (common_student$G1.x + common_student$G2.x + common_student$G3.x)/3
+common_student$mean_grade.y <- (common_student$G1.y + common_student$G2.y + common_student$G3.y)/3
 
 ## Processing data
 mat <- common_student[c("sex","G1.x","G2.x", "G3.x", "studytime.x")]
@@ -83,9 +84,11 @@ palet <- c(         "#ffd700",
                      "#cd34b5",
                      "#9d02d7",
                     "#CC79A7","#56B4E9")
-## scatter
+                    
+
+## scatter with final grade with gaussian noise
 ggplot() +
-  geom_jitter(aes(x=common_student$G3.y, y =common_student$G3.x, color = common_student$sex,  size=as.factor(common_student$studytime.x)), alpha = 0.7) + 
+  geom_jitter(aes(x=common_student$G3.y, y =common_student$G3.x, color = common_student$sex,  size=common_student$studytime.x), alpha = 0.7, width = 0.4, height = 0.4) + 
   theme_light()+
   scale_color_manual(values = cbPalette)+
   #geom_hline(yintercept=mean(common_student[which(common_student$sex=="M"),]$G3.x),  linetype="dashed", color = "#4577A0", size=0.6, alpha=0.5 )+
@@ -98,36 +101,36 @@ ggplot() +
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", vjust=-1.2, color="#090809", angle=90, alpha=0.4)+
   ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
   labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set", color="Sex", size="Study hours")+
+  theme(legend.position = c(0.93,0.10), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "horizontal")+
   ylab("Math Grade") +
   xlab("Spanish Grade")
+ggsave("PLOT/scatter_grade_sex_study.jpeg", dpi=700, bg="white", width = 16, height = 10)
 
 
-## box
-grid.arrange(
-ggplot(data = common_student) + geom_boxplot(aes(x=sex, y=G3.x, fill=sex)) +
-  scale_fill_manual(values = cbPalette)+
-  theme_minimal()+
-  ylab("Math grade"),
- ggplot(data = common_student) + geom_boxplot(aes(x=sex, y=G3.y, fill=sex))+
-  scale_fill_manual(values = cbPalette)+
-  theme_minimal()+
-  ylab("Pourt grade"),
 
-   ncol=2
-)
+## SCatter with mean
+ggplot() +
+  geom_jitter(aes(x=common_student$mean_grade.y, y =common_student$mean_grade.x, color = common_student$sex,  size=common_student$studytime.x), alpha = 0.7, width = 0.4, height = 0.4) + 
+  theme_light()+
+  scale_color_manual(values = cbPalette)+
+  #geom_hline(yintercept=mean(common_student[which(common_student$sex=="M"),]$G3.x),  linetype="dashed", color = "#4577A0", size=0.6, alpha=0.5 )+
+  #geom_hline(yintercept=mean(common_student[which(common_student$sex=="F"),]$G3.x),  linetype="dashed", color="#A60A55", size=0.6, alpha=0.5)+
+  #geom_vline(xintercept=mean(common_student[which(common_student$sex=="M"),]$G3.y),  linetype="dashed", color= "#4577A0", size=0.6, alpha=0.5)+
+  #geom_vline(xintercept=mean(common_student[which(common_student$sex=="F"),]$G3.y),  linetype="dashed", color="#A60A55",size=0.6, alpha=0.5)+
+  geom_hline(yintercept=mean(common_student$mean_grade.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
+  geom_text(aes(x=-0, y=mean(common_student$mean_grade.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
+  geom_vline(xintercept=mean(common_student$mean_grade.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
+  geom_text(aes(x=mean(common_student$mean_grade.y), y=18), label="Mean portuguese grade", vjust=-1.2, color="#090809", angle=90, alpha=0.4)+
+  ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
+  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set", color="Sex", size="Study hours")+
+  theme(legend.position = c(0.93,0.10), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "horizontal")+
+  ylab("Math Grade") +
+  xlab("Spanish Grade")
+ggsave("PLOT/scatter_grade_sex_study.jpeg", dpi=700, bg="white", width = 16, height = 10)
 
-##violin
-grid.arrange(
-  ggplot(data = common_student) + geom_violin(aes(x=sex, y=G3.x, fill=sex)) +
-  theme_minimal()+
-    scale_fill_manual(values=cbPalette)+
-  ylab("Math grade"),
-  ggplot(data = common_student) + geom_violin(aes(x=sex, y=G3.y, fill=sex))+
-  theme_minimal()+
-    scale_fill_manual(values=cbPalette)+
-  ylab("Pourt grade"),
-  ncol=2
-)
+
+
+
 
 
 ##beeswarm
@@ -142,7 +145,7 @@ ggplot() +
   ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
   labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set")+
   theme_minimal()
-
+ggsave("PLOT/violin_grade_sex_study.png", dpi=600, bg="white", width = 16, height = 9)
 
 ggplot() +
   geom_jitter(aes(x=df$sex, y=df$grad, col=as.factor(df$group), size=as.factor(df$studytime), alpha=0.5 ), width=0.35, height=0.4) +
@@ -154,7 +157,7 @@ ggplot() +
 
 
 ## other violin
-ggplot()+
+ ggplot()+
   geom_violin(aes(x=as.factor(df$studytime), y=df$grad, fill=df$group, ), alpha=0.2, colour = NA)+
   geom_jitter(aes(x=0.77, y=df[which( df$studytime==1 & df$group=="math"),]$grad, col=df[which( df$studytime==1 & df$group=="math"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
   geom_jitter(aes(x=1.22, y=df[which( df$studytime==1 & df$group=="por"),]$grad, col=df[which( df$studytime==1 & df$group=="por"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
@@ -171,3 +174,4 @@ ggplot()+
   scale_fill_manual(values=c('#ffd700','#698F3F'))+
   xlab("Study time") +
   ylab("Final Grade")
+ggsave("PLOT/multiple_violin_grade_sex_study.png", dpi=600, bg="white", width = 16, height = 9)
