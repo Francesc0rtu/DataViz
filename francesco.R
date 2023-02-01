@@ -135,8 +135,8 @@ ggsave("PLOT/scatter_grade_sex_study.jpeg", dpi=700, bg="white", width = 16, hei
 ##beeswarm
 library(ggbeeswarm)
 ggplot() +
-  geom_jitter(aes(x=df$group, y=df$grad, col=as.factor(df$sex), size=as.factor(df$studytime), alpha=0.8 ), width=0.14, height=0.4) +
-  geom_violin(aes(x=df$group, y=df$grad, col=as.factor(df$sex), fill=as.factor(df$sex)), alpha=0.05, position = "identity")+
+  geom_jitter(aes(x=df$group, y=df$grad, col=as.factor(df$sex), size=as.factor(df$studytime), alpha=0.8 ), width=0.35, height=0.6) +
+  geom_violin(aes(x=df$group, y=df$grad, col=as.factor(df$sex), fill=as.factor(df$sex)), alpha=0.00, position = "identity")+
   scale_color_manual(name="Sex", values=cbPalette)+
   guides(fill= "none", size=guide_legend(title="Study time"), alpha="none")+
   xlab("Class") + ylab("Grade")+
@@ -177,26 +177,33 @@ ggplot() +
   geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
-  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set ",
-       title="Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours",
-       subtitle = "DIstribution of grades among classes and geneder, with studytime for each student in each class")+
-  theme_minimal()+
-  theme(plot.title = element_text(colour="black"), plot.subtitle = element_text(colour = "#5e5e5e"), axis.title.y = element_text(angle = 0, vjust = 0.5), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
+  labs(caption = "Source: UCI Machine Learning Repository, Student Performance Data Set ",
+       title="Correlation between grades of the two classes, gender of the students and hours of study",
+       subtitle = "The plot shows for each student, marked by her/his gender, the final grade obtained in the class of mathematics and portoguese.\nThe intensity of the color shows the avarage daily study hours.")+
+  theme(axis.text.x = element_text(size= 10, colour = "#5e5e5e"),
+    plot.title = element_text(colour="black"), 
+    plot.subtitle = element_text(colour = "#5e5e5e"), 
+    axis.title.y = element_text(angle = 0, vjust = 0.5), 
+    legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"),
+    legend.box = "vertical", axis.text.y = element_text(size = 10,colour = "#5e5e5e"))+
   ylab("Math Grade") +
   scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
   xlab("Portoguese Grade")
+
 ggsave("PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=700, bg="white", width = 12, height = 10)
+
+
 
 ## violin
 ggplot() +
   geom_violin(aes(x=df$group, y=df$grad, col=as.factor(df$sex)), alpha=0.1, position = "identity")+
   scale_color_manual(name="Sex", values=cbPalette)+
   new_scale_color()+ 
-  geom_jitter(aes(x=df[which(df$sex=="M"),]$group, y=df[which(df$sex=="M"),]$grad, col=as.factor(df[which(df$sex=="M"),]$studytime)), width=0.14, height=0.4,size=2.5) +
+  geom_jitter(aes(x=df[which(df$sex=="M"),]$group, y=df[which(df$sex=="M"),]$grad, col=as.factor(df[which(df$sex=="M"),]$studytime)), width=0.18, height=0.4,size=2.5) +
   scale_color_manual(name="Male studytime (hours)", values = male_palette)+
   new_scale_color()+
-  geom_jitter(aes(x=df[which(df$sex=="F"),]$group, y=df[which(df$sex=="F"),]$grad, col=as.factor(df[which(df$sex=="F"),]$studytime)), width=0.14, height=0.4,size =2.5 ) +
+  geom_jitter(aes(x=df[which(df$sex=="F"),]$group, y=df[which(df$sex=="F"),]$grad, col=as.factor(df[which(df$sex=="F"),]$studytime)), width=0.18, height=0.4,size =2.5 ) +
   scale_color_manual(name="Female studytime (hours)",values = female_palette)+
   guides(fill= "none", size=guide_legend(title="Study time"), alpha="none")+
   xlab("Class") + ylab("Grade")+
@@ -207,3 +214,14 @@ ggplot() +
   theme_minimal()+
   theme(plot.title = element_text(colour="black"), plot.subtitle = element_text(colour = "#5e5e5e"), axis.title.y = element_text(angle = 0, vjust = 0.5), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))
 ggsave("PLOT/violin_grade_sex_study_INTENSITY.png", dpi=600, bg="white", width = 16, height = 9)
+
+
+
+
+
+
+
+
+
+
+# colori titoli,
