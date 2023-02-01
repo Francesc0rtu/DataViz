@@ -53,6 +53,7 @@ plot_comparison("health")
 
 common_student$mean_grade.x <- (common_student$G1.x + common_student$G2.x + common_student$G3.x)/3
 common_student$mean_grade.y <- (common_student$G1.y + common_student$G2.y + common_student$G3.y)/3
+common_student$studytime_mean <- (common_student$studytime.x + common_student$studytime.y)/2
 
 ## Processing data
 mat <- common_student[c("sex","G1.x","G2.x", "G3.x", "studytime.x")]
@@ -88,23 +89,21 @@ palet <- c(         "#ffd700",
 
 ## scatter with final grade with gaussian noise
 ggplot() +
-  geom_jitter(aes(x=common_student$G3.y, y =common_student$G3.x, color = common_student$sex,  size=common_student$studytime.x), alpha = 0.7, width = 0.4, height = 0.4) + 
+  geom_jitter(aes(x=common_student$G3.y, y =common_student$G3.x, color = common_student$sex,  size=common_student$studytime_mean), alpha = 0.7, width = 0.4, height = 0.4) + 
   theme_light()+
   scale_color_manual(values = cbPalette)+
-  #geom_hline(yintercept=mean(common_student[which(common_student$sex=="M"),]$G3.x),  linetype="dashed", color = "#4577A0", size=0.6, alpha=0.5 )+
-  #geom_hline(yintercept=mean(common_student[which(common_student$sex=="F"),]$G3.x),  linetype="dashed", color="#A60A55", size=0.6, alpha=0.5)+
-  #geom_vline(xintercept=mean(common_student[which(common_student$sex=="M"),]$G3.y),  linetype="dashed", color= "#4577A0", size=0.6, alpha=0.5)+
-  #geom_vline(xintercept=mean(common_student[which(common_student$sex=="F"),]$G3.y),  linetype="dashed", color="#A60A55",size=0.6, alpha=0.5)+
   geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", vjust=-1.2, color="#090809", angle=90, alpha=0.4)+
   ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
   labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set", color="Sex", size="Study hours")+
-  theme(legend.position = c(0.93,0.10), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "horizontal")+
+  theme(legend.position = c(0.93,0.10), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "horizontal", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
   ylab("Math Grade") +
+  scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
+  scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
   xlab("Spanish Grade")
-ggsave("PLOT/scatter_grade_sex_study.jpeg", dpi=700, bg="white", width = 16, height = 10)
+ggsave("PLOT/scatter_grade_sex_study.jpeg", dpi=700, bg="white", width = 16, height = 16)
 
 
 
@@ -156,22 +155,51 @@ ggplot() +
 
 
 
-## other violin
- ggplot()+
-  geom_violin(aes(x=as.factor(df$studytime), y=df$grad, fill=df$group, ), alpha=0.2, colour = NA)+
-  geom_jitter(aes(x=0.77, y=df[which( df$studytime==1 & df$group=="math"),]$grad, col=df[which( df$studytime==1 & df$group=="math"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=1.22, y=df[which( df$studytime==1 & df$group=="por"),]$grad, col=df[which( df$studytime==1 & df$group=="por"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=1.77, y=df[which( df$studytime==2 & df$group=="math"),]$grad, col=df[which( df$studytime==2 & df$group=="math"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=2.22, y=df[which( df$studytime==2 & df$group=="por"),]$grad, col=df[which( df$studytime==2 & df$group=="por"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=2.77, y=df[which( df$studytime==3 & df$group=="math"),]$grad, col=df[which( df$studytime==3 & df$group=="math"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=3.22, y=df[which( df$studytime==3 & df$group=="por"),]$grad, col=df[which( df$studytime==3 & df$group=="por"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=3.77, y=df[which( df$studytime==4 & df$group=="math"),]$grad, col=df[which( df$studytime==4 & df$group=="math"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  geom_jitter(aes(x=4.22, y=df[which( df$studytime==4 & df$group=="por"),]$grad, col=df[which( df$studytime==4 & df$group=="por"),]$sex), width=0.1, height = 0.15, size=2, alpha=0.7)+
-  theme_minimal()+
-  theme()+
-  guides(fill=guide_legend(title="Class"), col=guide_legend())+
-  scale_color_manual(name="Sex", values=c("#cd34b5","#4577A0", '#8da0cb','#e78ac3', '#292F36','#698F3F'))+ 
-  scale_fill_manual(values=c('#ffd700','#698F3F'))+
-  xlab("Study time") +
-  ylab("Final Grade")
-ggsave("PLOT/multiple_violin_grade_sex_study.png", dpi=600, bg="white", width = 16, height = 9)
+## COLOR INTENSITY INSTEAD SIZE
+
+library(ggnewscale)
+cbPalette <- c(  "#A60A55","#4577A0")
+palet <- c("#ffd700","#fa8775","#cd34b5","#9d02d7","#CC79A7","#56B4E9")
+male_palette <- c("#afcae0","#88afd1","#6095c1","#387ab2")
+female_palette <- c("#ce9cb4", "#b66b8f"  , "#9d3969"  , "#850844")
+
+## scatteR
+ggplot() +
+  geom_jitter(aes(x=common_student[which(common_student$sex == "M"),]$G3.y, y =common_student[which(common_student$sex == "M"),]$G3.x, color =common_student[which(common_student$sex == "M"),]$studytime_mean),size=2.9, alpha = 1, width = 0.4, height = 0.4) + 
+  scale_colour_gradientn(colours = c("#afcae0", "#387ab2"))+
+  labs(color="Male study hours:")+
+  new_scale_color()+
+  geom_jitter(aes(x=common_student[which(common_student$sex == "F"),]$G3.y, y =common_student[which(common_student$sex == "F"),]$G3.x, color =common_student[which(common_student$sex == "F"),]$studytime_mean),size=2.9, alpha = 1, width = 0.4, height = 0.4) +
+  scale_colour_gradientn(colours = c("#ce9cb4", "#850844"))+
+  labs(color="Female study hours:")+
+  theme_light()+
+  geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
+  geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
+  geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
+  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", vjust=-1.2, color="#090809", angle=90, alpha=0.4)+
+  ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
+  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set")+
+  theme(legend.position = c(0.94,0.21), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
+  ylab("Math Grade") +
+  scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
+  scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
+  xlab("Spanish Grade")
+
+
+## violin
+ggplot() +
+  geom_violin(aes(x=df$group, y=df$grad, col=as.factor(df$sex)), alpha=0.1, position = "identity")+
+  scale_color_manual(name="Sex", values=cbPalette)+
+  new_scale_color()+ 
+  geom_jitter(aes(x=df[which(df$sex=="M"),]$group, y=df[which(df$sex=="M"),]$grad, col=as.factor(df[which(df$sex=="M"),]$studytime)), width=0.14, height=0.4,size=2.5) +
+  scale_color_manual(name="Male studytime (hours)", values = male_palette)+
+  new_scale_color()+
+  geom_jitter(aes(x=df[which(df$sex=="F"),]$group, y=df[which(df$sex=="F"),]$grad, col=as.factor(df[which(df$sex=="F"),]$studytime)), width=0.14, height=0.4,size =2.5 ) +
+  scale_color_manual(name="Female studytime (hours)",values = female_palette)+
+  guides(fill= "none", size=guide_legend(title="Study time"), alpha="none")+
+  xlab("Class") + ylab("Grade")+
+  scale_fill_manual(values=cbPalette)+
+  ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
+  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set")+
+  theme_minimal()
+
