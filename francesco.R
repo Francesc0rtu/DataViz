@@ -178,8 +178,8 @@ ggplot() +
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
   labs(caption = "Source: UCI Machine Learning Repository, Student Performance Data Set ",
-       title="Correlation between grades of the two classes, gender of the students and hours of study",
-       subtitle = "The plot shows for each student, marked by her/his gender, the final grade obtained in the class of mathematics and portoguese.\nThe intensity of the color shows the avarage daily study hours.")+
+       title="The impact of gender and study hours on student performance in Math and Portoguese classes",
+       subtitle = "Examining the correlation between Math and Portuguese grades with gender represented by point color and\naverage daily study hours epresented by point intensity")+
   theme(axis.text.x = element_text(size= 10, colour = "#5e5e5e"),
     plot.title = element_text(colour="black"), 
     plot.subtitle = element_text(colour = "#5e5e5e"), 
