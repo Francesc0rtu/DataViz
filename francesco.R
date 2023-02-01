@@ -177,9 +177,11 @@ ggplot() +
   geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
-  ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
-  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set")+
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
+  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set ",
+       title="Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours",
+       subtitle = "DIstribution of grades among classes and geneder, with studytime for each student in each class")+
+  theme_minimal()+
+  theme(plot.title = element_text(colour="black"), plot.subtitle = element_text(colour = "#5e5e5e"), axis.title.y = element_text(angle = 0, vjust = 0.5), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
   ylab("Math Grade") +
   scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
@@ -199,9 +201,9 @@ ggplot() +
   guides(fill= "none", size=guide_legend(title="Study time"), alpha="none")+
   xlab("Class") + ylab("Grade")+
   scale_fill_manual(values=cbPalette)+
-  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set",
+  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set ",
        title="Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours",
        subtitle = "DIstribution of grades among classes and geneder, with studytime for each student in each class")+
   theme_minimal()+
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.5), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))
+  theme(plot.title = element_text(colour="black"), plot.subtitle = element_text(colour = "#5e5e5e"), axis.title.y = element_text(angle = 0, vjust = 0.5), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))
 ggsave("PLOT/violin_grade_sex_study_INTENSITY.png", dpi=600, bg="white", width = 16, height = 9)
