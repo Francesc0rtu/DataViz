@@ -65,7 +65,7 @@ mat$G2 <- mat$G2.x
 mat$G2.x <- NULL
 mat$G1 <- mat$G1.x 
 mat$G1.x <- NULL
-mat$group <- "math"
+mat$group <- "Mathematics"
 por <- common_student[c("sex", "G1.y", "G2.y", "G3.y", "studytime.x")]
 por$studytime <- por$studytime.x
 por$studytime.x <- NULL
@@ -75,7 +75,7 @@ por$G2 <- por$G2.y
 por$G2.y <- NULL
 por$G1 <- por$G1.y
 por$G1.y <- NULL
-por$group <- "por"
+por$group <- "Portuguese"
 df <- rbind(mat, por)
 
 ##  PLOT
@@ -95,14 +95,14 @@ ggplot() +
   geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
-  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", vjust=-1.2, color="#090809", angle=90, alpha=0.4)+
+  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0, alpha=0.4)+
   ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
   labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set", color="Sex", size="Study hours")+
   theme(legend.position = c(0.93,0.10), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "horizontal", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
   ylab("Math Grade") +
   scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
-  xlab("Spanish Grade")
+  xlab("Portoguese Grade")
 ggsave("PLOT/scatter_grade_sex_study.jpeg", dpi=700, bg="white", width = 16, height = 16)
 
 
@@ -176,15 +176,15 @@ ggplot() +
   geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
-  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", vjust=-1.2, color="#090809", angle=90, alpha=0.4)+
+  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
   ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
   labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set")+
-  theme(legend.position = c(0.94,0.21), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="#090800"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))+
   ylab("Math Grade") +
   scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
-  xlab("Spanish Grade")
-
+  xlab("Portoguese Grade")
+ggsave("PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=700, bg="white", width = 12, height = 10)
 
 ## violin
 ggplot() +
@@ -199,7 +199,9 @@ ggplot() +
   guides(fill= "none", size=guide_legend(title="Study time"), alpha="none")+
   xlab("Class") + ylab("Grade")+
   scale_fill_manual(values=cbPalette)+
-  ggtitle("Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours")+
-  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set")+
-  theme_minimal()
-
+  labs(caption = "Source: UCI Machine Learning Repository: Student Performance Data Set",
+       title="Multi-Dimensional Analysis of Students' Grades, Sex, and Study Hours",
+       subtitle = "DIstribution of grades among classes and geneder, with studytime for each student in each class")+
+  theme_minimal()+
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5), legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"), legend.box = "vertical", axis.text.y = element_text(angle = 0, vjust = 0.5, hjust=1))
+ggsave("PLOT/violin_grade_sex_study_INTENSITY.png", dpi=600, bg="white", width = 16, height = 9)
