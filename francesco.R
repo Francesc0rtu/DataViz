@@ -172,24 +172,37 @@ ggplot() +
   geom_jitter(aes(x=common_student[which(common_student$sex == "F"),]$G3.y, y =common_student[which(common_student$sex == "F"),]$G3.x, color =common_student[which(common_student$sex == "F"),]$studytime_mean),size=2.9, alpha = 1, width = 0.4, height = 0.4) +
   scale_colour_gradientn(colours = c("#ce9cb4", "#850844"))+
   labs(color="Female study hours:")+
-  theme_light()+
+  theme_light(base_size = 12)+
   geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
-  labs(caption = "Source: UCI Machine Learning Repository, Student Performance Data Set ",
+  labs(caption = "Source: UCI Machine Learning Repository - Student Performance Data Set ",
        title="The impact of gender and study hours on student performance in Math and Portoguese classes",
        subtitle = "Examining the correlation between Math and Portuguese grades with gender represented by point color and\naverage daily study hours epresented by point intensity")+
-  theme(axis.text.x = element_text(size= 10, colour = "#5e5e5e"),
-    plot.title = element_text(colour="black"), 
-    plot.subtitle = element_text(colour = "#5e5e5e"), 
-    axis.title.y = element_text(angle = 0, vjust = 0.5), 
-    legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"),
-    legend.box = "vertical", axis.text.y = element_text(size = 10,colour = "#5e5e5e"))+
-  ylab("Math Grade") +
+  theme(axis.text.x = element_text(size= 12, colour = "grey40"),
+    plot.title = element_text(colour="black", face="bold", size=17.45), 
+    axis.title.y = element_text(angle = 0, vjust = 0.5, color = "black"), 
+    #legend.background = element_rect(fill="white",size=0.5, linetype="solid",colour ="lightgray"),
+    legend.box = "vertical",
+    legend.position = "right",
+    legend.title = element_text(size=12),
+    legend.text = element_text(
+      color = "grey40", 
+      size = 10.8
+    ),
+    axis.text.y = element_text(size = 12,colour = "grey40"),
+    plot.caption = element_text(colour = "grey55"),
+    plot.subtitle = element_textbox_simple(
+      color = "grey40", 
+      size = 10.8,
+      lineheight = 1.3, 
+      margin = margin(t = 5, b = 30)
+    ))+
+  ylab("Math grade") +
   scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
-  xlab("Portoguese Grade")
+  xlab("Portoguese grade")
 
 ggsave("PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=700, bg="white", width = 12, height = 10)
 
@@ -224,4 +237,6 @@ ggsave("PLOT/violin_grade_sex_study_INTENSITY.png", dpi=600, bg="white", width =
 
 
 
-# colori titoli,
+# UNIFORM
+theme : minimal
+
