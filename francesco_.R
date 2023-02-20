@@ -45,7 +45,7 @@ por$group <- "Portuguese"
 df <- rbind(mat, por)
 
 ## scatteR
-ggplot() +
+plot <- ggplot() +
   geom_jitter(aes(x=common_student[which(common_student$sex == "M"),]$G3.y, y =common_student[which(common_student$sex == "M"),]$G3.x, color =common_student[which(common_student$sex == "M"),]$studytime_mean),size=2.9, alpha = 1, width = 0.4, height = 0.4) + 
   scale_colour_gradientn(colours = c("#afcae0", "#387ab2"))+
   labs(color="Male and\nstudy hours:")+
@@ -59,9 +59,8 @@ ggplot() +
   geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
   geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
   labs(caption = "Source: UCI Machine Learning Repository - Student Performance Data Set ",
-       title="The impact of gender and study hours on student performance in Math and Portoguese classes",
-       subtitle = "Examining the correlation between student grade in Math and Portuguese classes with gender represented by point color and\naverage daily study hours epresented by point intensity. It is possible to notice that female are better than male in Portoguese while viceversa in Math.
-       It also clear the linear correlation between the two grades: on avarage, the students have the same performance in both the subjects. However, some students have 0 grade in Math while have a higher grade in Portoguese. ")+
+       title="How are the grades distributed among different genders and study hours?",
+       subtitle = "The plot illustrates the correlation between student grades in Math and Portuguese classes, with gender being represented by point color and average daily study hours represented by point intensity. It can be seen that females typically perform better in Portuguese, whereas males perform better in Math. There is also a noticeable linear correlation between the two grades, indicating that, on average, students tend to have similar performance in both subjects. However, there are more students who receive a grade of 0 in Math but still have a higher grade in Portuguese compared to the opposite scenario. ")+
   theme(axis.text.x = element_text(size= 12, colour = "grey40"),
         plot.title = element_text(colour="black", face="bold", size=17.45), 
         axis.title.y = element_text(angle = 0, vjust = 0.5, color = "black"), 
@@ -86,6 +85,42 @@ ggplot() +
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
   xlab("Portoguese grade")
 
-ggsave("PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=700, bg="white", width = 13, height = 10)
+alignTitles <- function(ggplot, title = 2, subtitle = 2, caption = 2) {
+  # grab the saved ggplot2 object
+  g <- ggplotGrob(ggplot)
+  
+  
+  # find the object which provides the plot information for the title, subtitle, and caption
+  g$layout[which(g$layout$name == "title"),]$l <- title
+  g$layout[which(g$layout$name == "subtitle"),]$l <- subtitle
+  g$layout[which(g$layout$name == "caption"),]$l <- caption
+  g
+}
 
 
+
+ggsave(grid.draw(alignTitles(plot)),filename = "PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=600, bg="white", width = 12, height = 9)
+
+
+
+# Example data
+math_grade <- c(80, 75, 70, 65, 60, 55, 50, 45, 40, 35)
+portuguese_grade <- c(70, 75, 80, 85, 90, 95, 100, 95, 90, 85)
+gender <- c("Male", "Female", "Female", "Male", "Male", "Female", "Male", "Female", "Female", "Male")
+study_hours <- c(10, 8, 12, 9, 7, 11, 6, 13, 14, 10)
+df <- data.frame(math_grade, portuguese_grade, gender, study_hours)
+
+# Plotting
+ggplot(df, aes(x = portuguese_grade, y = math_grade, color = study_hours,
+               fill = gender)) +
+  geom_point() +
+  scale_fill_manual(values = c("pink", "blue"),
+                    labels = c("Female", "Male")) +
+  scale_color_gradient(low = "lightyellow", high = "darkorange",
+                       guide = guide_colorbar(title = "Average Daily Study Hours")) +
+  labs(color = NULL,
+       fill = "Gender and Study Hours",
+       x = "Portuguese Grade",
+       y = "Math Grade",
+       title = "Correlation between Math and Portuguese Grades") +
+  theme(legend.title = element_text(face = "bold", size = 12))

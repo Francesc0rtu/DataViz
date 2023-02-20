@@ -89,7 +89,7 @@ palet <- c(         "#ffd700",
 
 ## scatter with final grade with gaussian noise
 ggplot() +
-  geom_jitter(aes(x=common_student$G3.y, y =common_student$G3.x, color = common_student$sex,  size=common_student$studytime_mean), alpha = 0.7, width = 0.4, height = 0.4) + 
+  geom_jitter(aes(x=common_student$G3.y, y =common_student$G3.x, color = common_student$sex,  size=common_student$studytime_mean), alpha = 0.8, width = 0.4, height = 0.4) + 
   theme_light()+
   scale_color_manual(values = cbPalette)+
   geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
@@ -152,34 +152,59 @@ ggplot() +
   scale_color_manual(values=palet)+
   theme_minimal()
 
-
+alignTitles <- function(ggplot, title = 2, subtitle = 2, caption = 2) {
+  
+  # grab the saved ggplot2 object
+  
+  g <- ggplotGrob(ggplot)
+  # find the object which provides the plot information for the title, subtitle, and caption
+  g$layout[which(g$layout$name == "title"),]$l <- title
+  
+  g$layout[which(g$layout$name == "subtitle"),]$l <- subtitle
+  
+  g$layout[which(g$layout$name == "caption"),]$l <- caption
+  
+  g
+}
+alligned_plot <- grid.draw(alignTitles(plot))
 
 
 ## COLOR INTENSITY INSTEAD SIZE
-
+library(ggtext)
 library(ggnewscale)
 cbPalette <- c(  "#A60A55","#4577A0")
 palet <- c("#ffd700","#fa8775","#cd34b5","#9d02d7","#CC79A7","#56B4E9")
 male_palette <- c("#afcae0","#88afd1","#6095c1","#387ab2")
 female_palette <- c("#ce9cb4", "#b66b8f"  , "#9d3969"  , "#850844")
+alpha_line <- 0.6
 
 ## scatteR
-ggplot() +
+plot <- ggplot() +
+  geom_hline(yintercept=mean(common_student[which(common_student$sex=="M"),]$G3.x),  linetype="dashed", color="#387ab2", size=0.6, alpha=alpha_line)+
+  geom_hline(yintercept=mean(common_student[which(common_student$sex=="F"),]$G3.x),  linetype="dashed", color="#850844", size=0.6, alpha=alpha_line)+
+  geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Women's avarage grade", vjust=1.4, hjust=-0.08, color="#850844", alpha=alpha_line)+
+  geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Men's avarage grade", vjust= -2.5, hjust=-0.08, color="#387ab2", alpha=alpha_line)+
+  #geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=alpha_line)+
+  geom_vline(xintercept=mean(common_student[which(common_student$sex=="M"),]$G3.y),  linetype="dashed", color= "#387ab2", size=0.6, alpha=alpha_line)+
+  geom_vline(xintercept=mean(common_student[which(common_student$sex=="F"),]$G3.y),  linetype="dashed", color= "#850844", size=0.6, alpha=alpha_line)+
+  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Women's avarage grade", hjust=-0.3,vjust=-7.5, color="#850844", angle=0,  alpha=alpha_line)+
+  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Men's avarage grade", hjust=1.35,vjust=-7.5, color="#387ab2", angle=0,  alpha=alpha_line)+
+  
   geom_jitter(aes(x=common_student[which(common_student$sex == "M"),]$G3.y, y =common_student[which(common_student$sex == "M"),]$G3.x, color =common_student[which(common_student$sex == "M"),]$studytime_mean),size=2.9, alpha = 1, width = 0.4, height = 0.4) + 
   scale_colour_gradientn(colours = c("#afcae0", "#387ab2"))+
-  labs(color="Male study hours:")+
+  labs(color="Hours of study - Men:")+
   new_scale_color()+
   geom_jitter(aes(x=common_student[which(common_student$sex == "F"),]$G3.y, y =common_student[which(common_student$sex == "F"),]$G3.x, color =common_student[which(common_student$sex == "F"),]$studytime_mean),size=2.9, alpha = 1, width = 0.4, height = 0.4) +
   scale_colour_gradientn(colours = c("#ce9cb4", "#850844"))+
-  labs(color="Female study hours:")+
+  labs(color="Hours of study - Women:")+
   theme_light(base_size = 12)+
-  geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=0.4)+
-  geom_text(aes(x=-0, y=mean(common_student$G3.x)), label="Mean math grade", vjust=1.4, color="#090809", alpha=0.4)+
-  geom_vline(xintercept=mean(common_student$G3.y),  linetype="dashed", color= "#090809", size=0.6, alpha=0.4)+
-  geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
+  #geom_point(aes(x=mean(common_student[which(common_student$sex == "M"),]$G3.y), y=mean(common_student[which(common_student$sex == "M"),]$G3.x) ),  shape=18, color="#387ab2", size=4  )+
+  #geom_point(aes(x=mean(common_student[which(common_student$sex == "F"),]$G3.y), y=mean(common_student[which(common_student$sex == "F"),]$G3.x) ),  shape=18, color = "#850844", size=4  )+
+  #geom_hline(yintercept=mean(common_student$G3.x),  linetype="dashed", color="#090809", size=0.6, alpha=alpha_line)+
+  #geom_text(aes(x=mean(common_student$G3.y), y=18), label="Mean portuguese grade", hjust=1.1,vjust=-6, color="#090809", angle=0,  alpha=0.4)+
   labs(caption = "Source: UCI Machine Learning Repository - Student Performance Data Set ",
        title="The impact of gender and study hours on student performance in Math and Portoguese classes",
-       subtitle = "Examining the correlation between Math and Portuguese grades with gender represented by point color and\naverage daily study hours epresented by point intensity")+
+       subtitle = "Correlation between Mathematics and Portuguese grades by gender and study hours. Female students outperform male students in Portuguese, while male students perform better than female students in Math.")+
   theme(axis.text.x = element_text(size= 12, colour = "grey40"),
     plot.title = element_text(colour="black", face="bold", size=17.45), 
     axis.title.y = element_text(angle = 0, vjust = 0.5, color = "black"), 
@@ -202,9 +227,10 @@ ggplot() +
   ylab("Math grade") +
   scale_y_continuous(limits = c(0, 20), oob = scales::squish)+
   scale_x_continuous(limits = c(0, 20), oob = scales::squish)+
-  xlab("Portoguese grade")
+  xlab("Portuguese grade")
 
-ggsave("PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=700, bg="white", width = 12, height = 10)
+ggsave(grid.draw(alignTitles(plot)),filename = "PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=600, bg="white", width = 12, height = 9)
+ggsave("PLOT/scatter_grade_sex_study_INTENSITY.jpeg", dpi=700, bg="white", width = 13, height = 10)
 
 
 
@@ -214,10 +240,10 @@ ggplot() +
   scale_color_manual(name="Sex", values=cbPalette)+
   new_scale_color()+ 
   geom_jitter(aes(x=df[which(df$sex=="M"),]$group, y=df[which(df$sex=="M"),]$grad, col=as.factor(df[which(df$sex=="M"),]$studytime)), width=0.18, height=0.4,size=2.5) +
-  scale_color_manual(name="Male studytime (hours)", values = male_palette)+
+  scale_color_manual(name="Men studytime (hours)", values = male_palette)+
   new_scale_color()+
   geom_jitter(aes(x=df[which(df$sex=="F"),]$group, y=df[which(df$sex=="F"),]$grad, col=as.factor(df[which(df$sex=="F"),]$studytime)), width=0.18, height=0.4,size =2.5 ) +
-  scale_color_manual(name="Female studytime (hours)",values = female_palette)+
+  scale_color_manual(name="Women studytime (hours)",values = female_palette)+
   guides(fill= "none", size=guide_legend(title="Study time"), alpha="none")+
   xlab("Class") + ylab("Grade")+
   scale_fill_manual(values=cbPalette)+
